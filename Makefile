@@ -4,6 +4,8 @@ include $(TOP_DIR)/tools/Makefile.common
 DEPLOY_RUNTIME ?= /kb/runtime
 TARGET ?= /kb/deployment
 
+ifeq ($(RASTTK_DEPLOYMENT),)
+
 SRC_PERL = $(wildcard scripts/*.pl)
 BIN_PERL = $(addprefix $(BIN_DIR)/,$(basename $(notdir $(SRC_PERL))))
 DEPLOY_PERL = $(addprefix $(TARGET)/bin/,$(basename $(notdir $(SRC_PERL))))
@@ -11,6 +13,22 @@ DEPLOY_PERL = $(addprefix $(TARGET)/bin/,$(basename $(notdir $(SRC_PERL))))
 SRC_SERVICE_PERL = $(wildcard service-scripts/*.pl)
 BIN_SERVICE_PERL = $(addprefix $(BIN_DIR)/,$(basename $(notdir $(SRC_SERVICE_PERL))))
 DEPLOY_SERVICE_PERL = $(addprefix $(SERVICE_DIR)/bin/,$(basename $(notdir $(SRC_SERVICE_PERL))))
+
+else
+
+std_SRC_PERL = $(wildcard scripts/*.pl)
+std_BIN_PERL = $(addprefix $(BIN_DIR)/,$(basename $(notdir $(std_SRC_PERL))))
+std_DEPLOY_PERL = $(addprefix $(TARGET)/bin/,$(basename $(notdir $(std_SRC_PERL))))
+
+std_SRC_SERVICE_PERL = $(wildcard service-scripts/*.pl)
+std_BIN_SERVICE_PERL = $(addprefix $(BIN_DIR)/,$(basename $(notdir $(std_SRC_SERVICE_PERL))))
+std_DEPLOY_SERVICE_PERL = $(addprefix $(TARGET)/bin/,$(basename $(notdir $(std_SRC_SERVICE_PERL))))
+
+SRC_PERL = $(std_SRC_PERL) $(std_SRC_SERVICE_PERL)
+BIN_PERL = $(std_BIN_PERL) $(std_BIN_SERVICE_PERL)
+DEPLOY_PERL = $(std_DEPLOY_PERL) $(std_DEPLOY_SERVICE_PERL)
+
+endif
 
 SERVER_MODULE = CDMI_API
 SERVICE = cdmi_api
